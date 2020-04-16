@@ -18,11 +18,12 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
-	"github.com/cockroachdb/cockroach-go/crdb"
-	"github.com/cockroachdb/cockroach-go/testserver"
-	"github.com/jackc/pgx"
-	"github.com/jackc/pgx/pgxpool"
 	"testing"
+
+	"github.com/LUSHDigital/cockroach-go/crdb"
+	"github.com/LUSHDigital/cockroach-go/testserver"
+	"github.com/jackc/pgx/v4"
+	"github.com/jackc/pgx/v4/pgxpool"
 )
 
 // TestExecuteTx verifies transaction retry using the classic

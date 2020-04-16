@@ -94,6 +94,11 @@ func Execute(fn func() error) (err error) {
 	}
 }
 
+// Transactor implements the sql.DB.BeginTx to make sure mock types can be used with this package.
+type Transactor interface {
+	BeginTx(ctx context.Context, opts *sql.TxOptions) (*sql.Tx, error)
+}
+
 // ExecuteTx runs fn inside a transaction and retries it as needed. On
 // non-retryable failures, the transaction is aborted and rolled back; on
 // success, the transaction is committed.
@@ -138,10 +143,10 @@ func Execute(fn func() error) (err error) {
 //    })
 //
 func ExecuteTx(
-	ctx context.Context, db *sql.DB, opts *sql.TxOptions, fn func(*sql.Tx) error,
+	ctx context.Context, trx Transactor, opts *sql.TxOptions, fn func(*sql.Tx) error,
 ) error {
 	// Start a transaction.
-	tx, err := db.BeginTx(ctx, opts)
+	tx, err := trx.BeginTx(ctx, opts)
 	if err != nil {
 		return err
 	}
